@@ -1,0 +1,378 @@
+
+sub int min(int a, int b) begin;
+    # return the smaller of two numbers
+	if a<b then return a; end;
+	return b;
+end;
+
+sub int max(int a, int b) begin;
+    # return the larger of two numbers
+	if a>b then return a; end;
+	return b;
+end;
+
+sub string intjoin(array<int>arr[], string delimiter) begin
+	# join an int array to a string with delimiters, like Python `string.join()`
+	string str = "";
+	loop int i=1 until i>arr.count() begin
+		str.append(string(arr[i]));
+		i = i+1;
+		if i<arr.count() then
+			str.append(string(arr[i]));
+		end;
+	end;
+	return str
+end;
+
+
+sub string strjoin(array<string>arr[], string delimiter) begin
+	# join an int array to a string with delimiters, like Python `string.join()`
+	string str = "";
+	loop int i=1 until i>arr.count() begin
+		str = str + arr[i] + delimiter;
+		i = i + 1;
+	end;
+	return str.substring(1, str.count()-1)
+end;
+
+sub txt_append(string filename, string message) begin
+	output_file txt_file = new output_file();
+	txt_file.open_append(filename);
+	txt_file.print_line(message);
+	txt_file.close();
+end;
+
+sub response_log( string message) begin
+	string filename = logfile.filename() + "_response.txt";
+	txt_append(filename, message);
+end;
+
+
+sub debuglog(string message) begin
+    # write some comment to a debug log file
+	# and print the same to the terminal
+	string filename = logfile.filename() + "_terminal.txt";
+	output_file terminal_file = new output_file();
+	terminal_file.open_append(filename);
+	string time = date_time("[hh:nn:ss] ");
+	term.print_line(time + message);
+	terminal_file.print_line(time + message);
+end;
+
+sub bool contains(array<int> arr[], int x) begin
+    # returns true if an int is contained in an array of ints
+	loop int i = 1 until i > arr.count()
+	begin
+		if arr[i]==x then
+			return true
+		end;
+		i = i+1;
+	end;
+	return false
+end;
+	
+sub string split_filename(string filename) begin
+    # return the filename without the extension
+	array<string> tmp[0];
+	filename.split("\\", tmp);
+	return tmp[tmp.count()];
+end;
+	
+sub int char2idx(string char) begin
+	# given a string or a number, return the given element of the sequence
+	int i;
+	char = char.upper();
+	if     char=="A" then i = 1;
+	elseif char=="B" then i = 2;
+	elseif char=="C" then i = 3;
+	elseif char=="D" then i = 4;
+	elseif char=="E" then i = 5;
+	elseif char=="F" then i = 6;
+	elseif char=="G" then i = 7;
+	elseif char=="H" then i = 8;
+	elseif char=="I" then i = 9;
+	elseif char=="J" then i = 10;
+	elseif char=="K" then i = 11;
+	elseif char=="L" then i = 12;
+	elseif char=="M" then i = 13;
+	elseif char=="N" then i = 14;
+	elseif char=="O" then i = 15;
+	elseif char=="P" then i = 16;
+	else
+		debuglog("ERROR, unknown char " + char);
+	end;
+
+	return i;
+end;
+
+sub print_correct_sequence begin;
+   # print out the sequence in correct order including all double items
+   string correct_sequence;
+   if n_positions==10 then;
+	   correct_sequence = "ABCDEFGHIJ";
+	elseif n_positions==12 then;
+		correct_sequence = "ABCDEFGEHIBJ";
+	elseif n_positions==20 then;
+		correct_sequence = "ABCDEBFGHIFJKLMJANOP";
+	else
+		correct_sequence = "AAAAAAAAAAAAAAAAAAAA";
+	end;
+	
+	debuglog("#########\nCorrect sequence:");
+	loop int i = 1 until i>n_positions begin;
+		string tmp = correct_sequence.substring(i, 1);
+		int idx = char2idx(tmp);
+		string filename = items[idx].filename();
+		filename = split_filename(filename);
+		debuglog(filename);
+		i = i+1;
+	end;
+	# now clear log so the participant doesnt see this right away
+	loop int i = 1 until i>35 begin;
+		i = i+1;
+		term.print_line("  ")
+	end;
+	debuglog("For correct sequence: scroll up.\n#########")
+end;
+
+sub sound get_sound(string filename, array<sound> sounds[]) begin
+	string lang = get_sdl_variable("language");
+	if lang=="" then lang="de" end;
+	
+	sounds.shuffle(); # shuffle
+	string pic_name = split_filename(filename.substring(1, filename.count()-4));
+	# first try to find the file with the specified language
+	loop int i=1 until i>sounds.count() begin
+		string sfilename = split_filename(sounds[i].get_wavefile().filename());
+		string snd_lang = sfilename.substring(1, 2);
+		string snd_name = sfilename.substring(4, sfilename.count()-7);
+		if snd_name==pic_name && lang==snd_lang then
+			return sounds[i];
+		end;
+		i = i+1;
+	end;
+
+	return sounds[1];
+end;
+
+sub array<sound, 1> load_sounds begin
+	array<string> audio_files[0];
+	debuglog("Loading wavefiles: ");
+	get_directory_files(stimulus_directory + "\\audio\\", audio_files);
+	array<sound> sounds_tmp[audio_files.count()];
+	loop int i=1 until i>audio_files.count() begin
+		string sound_filename = audio_files[i];
+		wavefile tmp = new wavefile(sound_filename);
+		tmp.set_filename(sound_filename);
+		tmp.load();
+		string name = split_filename(audio_files[i]);
+		tmp.set_description(name.substring(1, name.count()-4));
+		term.print(name + ", ");
+		sounds_tmp[i] = new sound(tmp);
+		i = i+1;
+	end;
+	term.print("\n");
+	return sounds_tmp;
+end;
+
+sub array<bitmap, 1> read_training_images begin
+	array<string> training_files[0];
+	debuglog("Loading training images: ");
+	get_directory_files(stimulus_directory + "\\images\\training\\", training_files);
+	array<bitmap> training_items_tmp[training_files.count()];
+	loop int i=1 until i>training_files.count() begin
+		string image_filename = training_files[i];
+		bitmap tmp = new bitmap(image_filename);
+		tmp.set_filename(image_filename);
+		tmp.load();
+		tmp.resize(image_size, image_size); # image size is defined in settings.pcl
+		string name = split_filename(training_files[i]);
+		tmp.set_description(name.substring(1, name.count()-4));
+		term.print(name + ", ");
+		training_items_tmp[i] = tmp;
+		i = i+1;
+	end;
+	term.print("\n");
+	return training_items_tmp;
+end;
+
+sub array<bitmap,1> read_sequence(string participant_number) begin
+    # read which images are loaded in which order
+	if participant_number.find("_")>0 then
+		participant_number.resize(participant_number.count()-2);
+	end;
+	string filename = ".\\sequences\\"+ exp_mode +"\\sequence_participant_" + participant_number + ".csv";
+	input_file in = new input_file;
+	in.open(filename);
+
+	debuglog("Reading sequence order from " + filename);
+	
+	# retrieve the total sequence of items
+	string files = in.get_line();
+	in.close();
+	
+	array<string> files_sequence[0];
+	files.split(",", files_sequence);
+	array<bitmap> items_tmp[files_sequence.count()];
+	
+	loop int i=1 until i>files_sequence.count() begin
+		string image_filename = "images\\" + exp_mode + "\\" + files_sequence[i];
+		bitmap tmp = new bitmap(image_filename);
+		tmp.set_filename(image_filename);
+		tmp.load();
+		tmp.resize(image_size, image_size); # image size is defined in settings.pcl
+		tmp.set_description(files_sequence[i].substring(1, files_sequence[i].count()-4));
+		term.print(files_sequence[i] + ", ");
+		items_tmp[i] = tmp;
+		i = i+1
+	end;
+	term.print("\n");
+	return items_tmp;
+end;
+
+sub array<int, 2> read_localizer_order(string participant_number) begin
+    # read localizer order for all 240 presentations and if a gray square should be shown or not
+	# the result is saved in a <int>array [image_nr][show_gray_square]
+	string filename = ".\\sequences\\" + exp_mode + "\\localizer_participant_" + participant_number + ".csv";
+	
+	input_file in = new input_file;
+	in.open(filename);
+	
+	debuglog("reading localizer order from " + filename);
+	
+	# now read localizer order
+	array<int> tmp_localizer_order[0][0];
+	loop until in.end_of_file() begin
+		string this_line = in.get_line();
+		array<string> tmp[0];
+		this_line.split(",", tmp);
+		array<int> tmp_item[2];
+		tmp_item[1] = int(tmp[1]);
+	   tmp_item[2] = int(tmp[2]);
+		
+		tmp_localizer_order.add(tmp_item);
+	end;
+	debuglog(string(tmp_localizer_order.count()) + " localizer items read.");
+	in.close();
+	
+	return tmp_localizer_order;
+end;
+
+sub array<string, 3> read_learning_units(string participant_number) begin
+	# reads the learning units to a string array
+	# returns arr[block_nr][learning_unit][item1;item2;choice1;choice2;choice3;correct_position]
+	string filename = ".\\sequences\\"+ exp_mode +"\\learning_units_participant_" + participant_number + ".csv";
+	input_file in = new input_file;
+	in.open(filename);
+	debuglog("reading learning units from " + filename);
+	
+	# now read the learning units
+	string header = in.get_line();
+	
+	array<string> arr_blocks[0][0][0];
+	
+	loop until in.end_of_file() begin
+		
+		string line_in = in.get_line();
+		array<string> split_block[0];
+		array<string> arr_block[0][0];
+		line_in.split(";", split_block);
+		
+		loop int i=1 until i>split_block.count() begin
+			array<string> split_seq[0];
+			split_block[i].split(",", split_seq);
+			arr_block.add(split_seq);			
+			i = i+1;
+		end;
+		
+		arr_blocks.add(arr_block);
+	end;
+	
+	debuglog(string(arr_blocks.count()) + " blocks read.");
+	in.close();
+	return arr_blocks;
+end;
+
+sub reset_picture(picture pic) begin;
+   # for each picture part, reset it with an empty picture part and 
+   # set order as before (on_top=false)
+	text empty = new text();
+	empty.redraw();
+	loop int i=1; until i>pic.part_count() begin;
+		pic.set_part(i, empty);
+		pic.set_part_on_top(i, false);
+		i = i+1;
+	end;
+end;
+
+sub set_seq(int block_nr, int trial_number) begin
+	# set the images of item1, item2, 3 choices to their picture_parts
+	# we retrieve the sequences of trial number x
+	array<string>curr_unit[] = learning_units[block_nr][trial_number];
+	
+	reset_picture(picture_seq1);
+	reset_picture(picture_seq2);
+	reset_picture(picture_feedback);
+	reset_picture(picture_selected);
+	
+	int seq1 = char2idx(curr_unit[1]); # item1
+	int seq2 = char2idx(curr_unit[2]); # item2
+	int choice1 = char2idx(curr_unit[3]); # choice1
+	int choice2 = char2idx(curr_unit[4]); # choice2
+	int choice3 = char2idx(curr_unit[5]); # choice3
+	int correct_button = int(curr_unit[6]); # which button is expected?
+	int correct_idx = char2idx(curr_unit[2+int(curr_unit[6])]); # item3 / correct item
+	
+	# debugging strings
+	string message = "Displaying " + curr_unit[1] + curr_unit[2] + ", choice: " + curr_unit[3] + curr_unit[4] + curr_unit[5] + ", corr: " + curr_unit[2+int(curr_unit[6])];
+	message = message + " || items: " + items[seq1].description() +" - "  +  items[seq2].description() + " ? " + items[choice1].description() + "|"+ items[choice2].description() + "|" + items[choice3].description();
+	message = message + " -> " + items[correct_idx].description();
+	debuglog(message);
+	debuglog("Exp. button " + string(correct_button));
+	
+	# Set the sequence code for the first item item_nr+100
+	stim_seq1.set_port_code(seq1);
+	stim_seq2.set_port_code(seq2);
+	stim_prompt.set_port_code(correct_idx);
+
+	# set which button is expected in this trial
+   stim_prompt.set_target_button(correct_button);
+	
+   # now set the corresponding objects to be displayed from the sequence
+	picture_seq1.set_part(1, items[seq1]); # trial_seq
+	picture_seq2.set_part(1, items[seq1]);
+	picture_seq2.set_part(2, items[seq2]);
+	
+	# set a random element to be correct
+	picture_prompt.set_part(1, items[seq1]); # trial_prompts
+	picture_prompt.set_part(2, items[seq2]);
+	picture_prompt.set_part(3, items[choice1]);
+	picture_prompt.set_part(4, items[choice2]);
+	picture_prompt.set_part(5, items[choice3]);
+		
+	# also set the same pictures to the feedback screen
+	picture_selected.set_part(1, items[seq1]); #trial_feedback
+	picture_selected.set_part(2, items[seq2]);
+	picture_selected.set_part(4, items[choice1]);
+	picture_selected.set_part(6, items[choice2]);
+	picture_selected.set_part(8, items[choice3]);
+	
+	picture_feedback.set_part(1, items[seq1]);
+	picture_feedback.set_part(2, items[seq2]);
+	picture_feedback.set_part(4, items[choice1]);
+	picture_feedback.set_part(6, items[choice2]);
+	picture_feedback.set_part(8, items[choice3]);
+		
+	# reset event codes to log the items that gave just been set
+	stim_seq1.set_event_code("seq1 " + split_filename(items[seq1].filename()));
+   stim_seq2.set_event_code("seq2 " + split_filename(items[seq2].filename()));
+	stim_prompt.set_event_code("prompt " + split_filename(items[choice1].filename()) + ", "
+													 + split_filename(items[choice2].filename()) + ", "
+													 + split_filename(items[choice3].filename()));
+													
+
+
+end;
+
+
+

@@ -1,0 +1,237 @@
+sub debuglog(string message) begin
+	string filename = logfile.filename() + "_terminal.txt";
+	output_file terminal_file = new output_file();
+	terminal_file.open_append(filename);
+	string time = date_time("[hh:nn:ss] ");
+	term.print_line(time + message);
+	terminal_file.print_line(time + message);
+end;
+
+	
+sub string split_filename(string filename) begin
+	array<string> tmp[0];
+	filename.split("\\", tmp);
+	return tmp[tmp.count()];
+end;
+	
+sub int char2idx(string char) begin
+	# given a string or a number, return the given element
+	int i;
+	char = char.upper();
+	if     char=="A" then i = 1;
+	elseif char=="B" then i = 2;
+	elseif char=="C" then i = 3;
+	elseif char=="D" then i = 4;
+	elseif char=="E" then i = 5;
+	elseif char=="F" then i = 6;
+	elseif char=="G" then i = 7;
+	elseif char=="H" then i = 8;
+	elseif char=="I" then i = 9;
+	elseif char=="J" then i = 10;
+	elseif char=="K" then i = 11;
+	elseif char=="L" then i = 12;
+	elseif char=="M" then i = 13;
+	elseif char=="N" then i = 14;
+	elseif char=="O" then i = 15;
+	elseif char=="P" then i = 16;
+	else
+		debuglog("ERROR, unknown char " + char);
+	end;
+
+	return i;
+end;
+
+sub print_correct_sequence begin;
+	string correct_sequence = "ABCDEBFGHIFJKLMJANOP";
+
+	loop int i = 1 until i>20 begin;
+		string tmp = correct_sequence.substring(i, 1);
+		int idx = char2idx(tmp);
+		string filename = items[idx].filename();
+		filename = split_filename(filename);
+		debuglog(filename);
+		i = i+1;
+	end;
+end;
+
+
+
+sub array<bitmap,1> read_sequence(int participant_number) begin
+	string filename = ".\\sequences\\sequence_participant_" + string(2) + ".csv";
+	input_file in = new input_file;
+	in.open(filename);
+
+	debuglog("Reading sequence order from " + filename);
+	
+	# retrieve the total sequence of items
+	string files = in.get_line();
+	in.close();
+	
+	array<string> files_sequence[0];
+	files.split(",", files_sequence);
+
+	array<bitmap> items_tmp[files_sequence.count()];
+	
+	loop int i=1 until i>files_sequence.count() begin
+		bitmap tmp = new bitmap();
+		array<string> tmp_split[0];
+		string description;
+		tmp.set_filename(files_sequence[i]);
+		tmp.load();
+		tmp.resize(image_size, image_size); # image size is defined in settings.pcl
+		tmp.set_description(files_sequence[i].substring(1, files_sequence[i].count()-4));
+		term.print(files_sequence[i] + ", ");
+		items.add(tmp);
+		i = i+1
+	end;
+	term.print("\n");
+	return items;
+end;
+
+sub array<int, 2> read_localizer_order(int participant_number) begin
+	string filename = ".\\sequences\\localizer_participant_" + string(2) + ".csv";
+	
+	input_file in = new input_file;
+	in.open(filename);
+	
+	debuglog("reading localizer order from " + filename);
+	
+	# now read localizer order
+	array<int> tmp_localizer_order[0][0];
+	loop until in.end_of_file() begin
+		string this_line = in.get_line();
+		array<string> tmp[0];
+		this_line.split(",", tmp);
+		array<int> tmp_item[2];
+		tmp_item[1] = int(tmp[1]);
+	   tmp_item[2] = int(tmp[2]);
+		
+		tmp_localizer_order.add(tmp_item);
+	end;
+	debuglog(string(tmp_localizer_order.count()) + " items read.");
+	in.close();
+	
+	return tmp_localizer_order;
+end;
+
+sub array<string, 3> read_learning_units(int participant_number) begin
+	string filename = ".\\sequences\\learning_units_participant_" + string(2) + ".csv";
+	input_file in = new input_file;
+	in.open(filename);
+	debuglog("reading learning units from " + filename);
+	
+	# now read the learning units
+	string header = in.get_line();
+	
+	array<string> arr_blocks[0][0][0];
+	
+	loop until in.end_of_file() begin
+		
+		string line_in = in.get_line();
+		array<string> split_block[0];
+		array<string> arr_block[0][0];
+		line_in.split(";", split_block);
+		
+		loop int i=1 until i>split_block.count() begin
+			array<string> split_seq[0];
+			split_block[i].split(",", split_seq);
+			arr_block.add(split_seq);			
+			i = i+1;
+		end;
+		
+		arr_blocks.add(arr_block);
+	end;
+	
+	debuglog(string(arr_blocks.count()) + " blocks read.");
+	in.close();
+	return arr_blocks;
+end;
+
+
+sub set_seq(int block_nr, int trial_number) begin
+	# we retrieve the sequences of trial number x
+	array<string>curr_unit[] = learning_units[block_nr][trial_number];
+
+	int seq1 = char2idx(curr_unit[1]);
+	int seq2 = char2idx(curr_unit[2]);
+	int choice1 = char2idx(curr_unit[3]); 
+	int choice2 = char2idx(curr_unit[4]); 
+	int choice3 = char2idx(curr_unit[5]); 
+	int correct_button = int(curr_unit[6]);
+	int correct_idx = char2idx(curr_unit[2+int(curr_unit[6])]);
+	string message = "Displaying " + curr_unit[1] + curr_unit[2] + ", choice: " + curr_unit[3] + curr_unit[4] + curr_unit[5] + ", corr: " + curr_unit[2+int(curr_unit[6])];
+	message = message + " || items: " + items[seq1].description() +" - "  +  items[seq2].description() + " ? " + items[choice1].description() + "|"+ items[choice2].description() + "|" + items[choice3].description();
+	message = message + " -> " + items[correct_idx].description();
+	debuglog(message);
+	
+   # now set the corresponding objects to be displayed from the sequence
+	picture_seq1.set_part(1, items[seq1]);
+	picture_seq2.set_part(1, items[seq2]);
+	
+	# set a random element to be correct
+	picture_prompt.set_part(1, items[choice1]);
+	picture_prompt.set_part(2, items[choice2]);
+	picture_prompt.set_part(3, items[choice3]);
+		
+	# also set the same pictures to the feedback screen
+	picture_selected.set_part(2, items[choice1]);
+	picture_selected.set_part(4, items[choice2]);
+	picture_selected.set_part(6, items[choice3]);
+	
+	picture_feedback.set_part(2, items[choice1]);
+	picture_feedback.set_part(4, items[choice2]);
+	picture_feedback.set_part(6, items[choice3]);
+	
+	# also jitter the inter-picture interval from 500-1000ms
+	int rnd_time1 = random(duration_fixation[1],duration_fixation[2]);
+	int rnd_time2 = random(duration_fixation[1],duration_fixation[2]);
+	int rnd_time3 = random(duration_fixation[1],duration_fixation[2]);
+	stim_seq1.set_delta_time(rnd_time1);
+	stim_seq2.set_delta_time(rnd_time2);
+	stim_prompt.set_delta_time(rnd_time3);
+	
+	stim_seq1.set_event_code("seq1 " + split_filename(items[seq1].filename()));
+   stim_seq2.set_event_code("seq2 " + split_filename(items[seq2].filename()));
+	stim_prompt.set_event_code("prompt " + split_filename(items[choice1].filename()) + ", "
+													 + split_filename(items[choice2].filename()) + ", "
+													 + split_filename(items[choice3].filename()));
+
+	debuglog("set fixation cross times to " + string(rnd_time1) + ", " + string(rnd_time2) + ", "+ string(rnd_time3)+" ms");
+	
+   stim_prompt.set_target_button(correct_button);
+
+   debuglog("Exp. button " + string(correct_button));
+end;
+
+
+
+sub prepare_feedback(int selected, int correct) begin
+	# reset all boxes to black
+	picture_selected.set_part(1, box_black);
+	picture_selected.set_part(3, box_black);
+	picture_selected.set_part(5, box_black);
+	picture_feedback.set_part(1, box_black);
+	picture_feedback.set_part(3, box_black);
+	picture_feedback.set_part(5, box_black);
+
+	picture_selected.set_part(selected*2-1, box_gray);
+
+	loop int i=1 until i>3 begin
+			
+		if i==correct then
+			picture_feedback.set_part(i*2-1, box_green);
+		else
+			picture_feedback.set_part(i*2, box_black);
+			picture_feedback.set_part(i*2-1, box_black);
+		end;
+		i = i+1;
+	end;
+		
+	 
+	if selected==correct then
+		picture_feedback.set_part(7, text_correct);
+	else
+		picture_feedback.set_part(7, text_wrong);
+	end;
+
+end;

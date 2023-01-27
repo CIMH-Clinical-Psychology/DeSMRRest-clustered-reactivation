@@ -1,0 +1,78 @@
+############# BEGIN OF SETTINGS ##################
+## here are all the settings for the experiment ##
+##################################################
+
+int n_training_items = 5; # amount of training images to show during trial
+int image_size = 125; # image size in pixels. purple circle is resized accordingly to 1/8th
+
+array<int> distractor_outer_color[3] = {255, 255, 255};
+array<int> distractor_inner_color[3] = {100, 0, 255};
+
+array<int> break_at[] = {40, 80, 120, 160, 200};  # the trial number at which a break will appear
+int alpha = 200; # 0-255, transparency of the purple circle, 0=invisible, 255=no transparency
+
+# TIMING SETTINGS FOR MEG
+array<int> duration_fixation_pre_audio_range[] = {750, 1250};
+array<int> duration_fixation_audio_range[] = {1250, 1750}; # sample uniform from 1250-1750ms,  sounds are currently ranging from 0.56-0.99 seconds
+int duration_show_item = 1000; # how long the image will be shown for each presentation
+int duration_show_feedback = 500; # minimum time that the green circle will be shown, however it can appear longer if the remaining time of the trial would be longer, ie. the participant pressed the button very fast. see localizer.sce for more
+
+
+############ END OF SETTINGS ################
+## because SDL sucks immensely, I have to  ##
+## set all the parameters in PCL manually. ##
+#############################################
+
+# set timing
+stim_fixation.set_time(duration_fixation_pre_audio_range[2]);
+stim_audio.set_time(duration_fixation_pre_audio_range[2]);
+trial_item.set_duration(duration_show_item);
+
+
+# inner is the purple/colored inner circle
+feedback_correct.add_line(-image_size/6, 0, image_size/6, 0);
+feedback_correct.add_line(0, -image_size/6, 0, image_size/6);
+feedback_correct.set_line_width(image_size/15);
+feedback_correct.set_fill_color(0, 150, 0, 200);
+feedback_correct.redraw();
+
+feedback_wrong.add_line(-image_size/6, -image_size/6, image_size/6, image_size/6);
+feedback_wrong.add_line(-image_size/6, image_size/6, image_size/6, -image_size/6);
+feedback_wrong.set_line_width(image_size/15);
+feedback_wrong.set_fill_color(150, 0, 0, 200);
+feedback_wrong.redraw();
+
+# resize items
+loop int i=1 until i>items.count() begin
+	items[i].resize(image_size, image_size);
+	i = i+1;
+end;
+############################################################
+### these are variables that are defined but are never used.
+### i have to do this to be able to import functions.pcl, 
+### as there are functions from the learning there as well.
+### otherwise Presentation complains...
+### Basically when other PCL files are included, presentation throws an error if any variable isn't 
+### declared, even if it is never used at all. There are functions that are used by both scripts 
+### (load_sequence, debuglog, min/max, etc etc), I did not want to have them redundant. However, there are 
+### functions that are only used by one or two of the three scripts, and then the third script throws an error.
+array<string> learning_units[0][0][0];
+picture picture_seq1;
+picture picture_seq2;
+picture picture_prompt;
+picture picture_selected;
+picture picture_feedback;
+stimulus_event stim_seq1;
+stimulus_event stim_seq2;
+stimulus_event stim_prompt;
+int n_positions;
+
+sub string calculate_runtime(int n_items, int n_presentations) begin
+	double x = (arithmetic_mean(duration_fixation_pre_audio_range) 
+					+ arithmetic_mean(duration_fixation_audio_range) 
+					+ duration_show_item 
+					+ (duration_show_feedback*n_items/n_presentations))*n_presentations;
+	int minutes = int(x/1000/60);
+   int seconds = int((x-(minutes*1000*60))/1000);
+	return string(minutes) + ":" + string(seconds);
+end;

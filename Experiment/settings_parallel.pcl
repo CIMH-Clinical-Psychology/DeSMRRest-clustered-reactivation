@@ -1,0 +1,174 @@
+############# BEGIN OF SETTINGS ##################
+## here are all the settings for the experiment ##
+##################################################
+int image_size  =  125; # size of images/items in pixels
+int border_size = 10;   # the border thickness that will be drawn around it when selecting
+
+# display times
+int duration_show_trial_start_screen = 3000; # "fixation" screen before next trial
+int duration_show_items = 1500; # show item1 and item1+item2 for this long
+int duration_show_selected = 1000; # show selection outline for 1 second
+int duration_show_feedback = 3000; # show green outline of correct item that long
+int max_reaction_time = 7000; # participants should answer within this time
+array<int> duration_fixation[2] = {500, 1000}; # sample uniform from 500-1000 ms
+
+################################################
+############# END OF SETTINGS ##################
+################################################
+
+
+################################################
+### use these settings for top/down presentation
+### set them dynamically here, all to scale
+################################################
+
+array<int> pos1[2]; # pos1 = the first item, seq1
+pos1[1] = 0;
+pos1[2] = image_size+border_size;
+
+array<int> pos2[2]; # pos2 = the second item, seq2
+pos2[1] = 0;
+pos2[2] = 0;
+
+array<int> pos3[3][2]; # pos3 = the three choices (therefore 2D array)
+pos3[1][1] = -image_size-border_size;
+pos3[1][2] = -image_size-border_size;
+pos3[2][1] = 0;
+pos3[2][2] = -image_size-border_size;
+pos3[3][1] = image_size+border_size;
+pos3[3][2] = -image_size-border_size;
+
+################################
+### set the current positions of the images
+pos1[1] = -image_size-border_size;
+pos1[2] = 0;
+
+
+pos3[1][1] = int(image_size*1.5)+border_size;
+pos3[1][2] = image_size+border_size;
+pos3[2][1] = int(image_size*1.5)+border_size ;
+pos3[2][2] = 0;
+pos3[3][1] = int(image_size*1.5)+border_size;
+pos3[3][2] = -image_size-border_size;
+
+# these are hardcoded training units, ie. every participant gets the same images in the same order for training
+array<string> training_units[][][] = {{{"B", "C", "E", "D", "G", "2"}, {"A", "B", "C", "D", "E", "1"},  
+												{"E", "F", "A", "G", "H", "3"}, {"A", "B", "D", "G", "C", "3"},
+												{"A", "B", "C", "D", "E", "1"}, {"B", "C", "E", "D", "G", "2"},
+												{"B", "C", "E", "D", "G", "2"}, {"A", "B", "C", "D", "E", "1"},  
+												{"E", "F", "A", "G", "H", "3"}, {"A", "B", "D", "G", "C", "3"},
+												{"A", "B", "C", "D", "E", "1"}, {"B", "C", "E", "D", "G", "2"},
+												{"B", "C", "E", "D", "G", "2"}, {"A", "B", "C", "D", "E", "1"},  
+												{"E", "F", "A", "G", "H", "3"}, {"A", "B", "D", "G", "C", "3"},
+												{"A", "B", "C", "D", "E", "1"}, {"B", "C", "E", "D", "G", "2"},
+												{"B", "C", "E", "D", "G", "2"}, {"A", "B", "C", "D", "E", "1"},  
+												{"E", "F", "A", "G", "H", "3"}, {"A", "B", "D", "G", "C", "3"},
+												{"A", "B", "C", "D", "E", "1"}, {"B", "C", "E", "D", "G", "2"},
+												{"B", "C", "E", "D", "G", "2"}, {"A", "B", "C", "D", "E", "1"},  
+												{"E", "F", "A", "G", "H", "3"}, {"A", "B", "D", "G", "C", "3"},
+												{"A", "B", "C", "D", "E", "1"}, {"B", "C", "E", "D", "G", "2"}}};
+############ END OF SETTINGS ################
+## because SDL sucks immensely, I have to  ##
+## set all the parameters in PCL manually. ##
+#############################################
+
+### set positions
+# position of fixation cross
+picture_training_pre.set_part_x(1, pos1[1]);
+picture_training_pre.set_part_y(1, pos1[2]);
+
+# position in seq1
+picture_seq1.set_part_x(1, pos1[1]);
+picture_seq1.set_part_y(1, pos1[2]);
+
+# position in seq2
+picture_seq2.set_part_x(1, pos1[1]);
+picture_seq2.set_part_y(1, pos1[2]);
+picture_seq2.set_part_x(2, pos2[1]);
+picture_seq2.set_part_y(2, pos2[2]);
+
+
+### set location of 1,2 in prompt screen
+picture_prompt.set_part_x(1, pos1[1]);
+picture_prompt.set_part_y(1, pos1[2]);
+picture_prompt.set_part_x(2, pos2[1]);
+picture_prompt.set_part_y(2, pos2[2]);
+
+picture_selected.set_part_x(1, pos1[1]);
+picture_selected.set_part_y(1, pos1[2]);
+picture_selected.set_part_x(2, pos2[1]);
+picture_selected.set_part_y(2, pos2[2]);
+picture_feedback.set_part_x(1, pos1[1]);
+picture_feedback.set_part_y(1, pos1[2]);
+picture_feedback.set_part_x(2, pos2[1]);
+picture_feedback.set_part_y(2, pos2[2]);
+loop int i=1; until i>3 begin;
+	picture_prompt.set_part_x(i+2, pos3[i][1]);
+	picture_prompt.set_part_y(i+2, pos3[i][2]);
+	i=i+1;
+end;
+
+
+# set location of 3 choices and boxes around them
+# reminder picture_selected and picture_feedback picture part numbering:
+# 1 = seq1, 2 = seq2, 3 = frame of choice1, 4 = choice1, 5 = frame of choice2, 6 = choice2, 7 = frame of choice3, 8 = choice 3 9 = text below
+# e.g. we set the items 3-8 again = 6 items, 3 frames and 3 images
+loop int i=1; until i>3 begin;
+	# set positions in the selection screen
+	picture_selected.set_part_x((i*2-1)+2, pos3[i][1]); # the box behind choice i
+	picture_selected.set_part_y((i*2-1)+2, pos3[i][2]); # the box behind choice i
+	picture_selected.set_part_x((i*2)+2, pos3[i][1]); # the image of choice i
+	picture_selected.set_part_y((i*2)+2, pos3[i][2]); # the image of choice i
+	
+	# set positions in the feedback screen
+	picture_feedback.set_part_x((i*2-1)+2, pos3[i][1]); # the box behind choice i
+	picture_feedback.set_part_y((i*2-1)+2, pos3[i][2]); # the box behind choice i
+	picture_feedback.set_part_x((i*2)+2, pos3[i][1]); # the image of choice i
+	picture_feedback.set_part_y((i*2)+2, pos3[i][2]); # the image of choice i
+	i=i+1;	
+end;
+
+picture_prompt.set_part_x(picture_prompt.part_count(), image_size*1.5/2);
+
+
+loop int i=1 until i>training_items.count() begin
+	training_items[i].resize(image_size, image_size);
+	i = i+1;
+end;
+
+# number captions for learning trials ("1,2,3")
+# that means at the same height of the image, 
+# show the number "1", "2" or "3" at exactly one image length next to it
+picture_prompt.set_part_x(7, pos3[1][1] + image_size);
+picture_prompt.set_part_y(7, pos3[1][2]);
+picture_prompt.set_part_x(8, pos3[2][1] + image_size);
+picture_prompt.set_part_y(8, pos3[2][2]);
+picture_prompt.set_part_x(9, pos3[3][1] + image_size);
+picture_prompt.set_part_y(9, pos3[3][2]);
+
+# setting box heights
+box_red.set_height(image_size+border_size);
+box_red.set_width(image_size+border_size);
+box_green.set_height(image_size+border_size);
+box_green.set_width(image_size+border_size);
+box_selected.set_height(image_size+border_size);
+box_selected.set_width(image_size+border_size);
+box_black.set_height(image_size+border_size);
+box_black.set_width(image_size+border_size);
+
+############ timings
+# set timings, can be a bit confusing, 
+# delta_time takes the time of the item that was displayed before
+trial_prompt.set_duration(max_reaction_time);
+stim_preq.set_delta_time(0);
+stim_seq1.set_delta_time(duration_show_trial_start_screen);
+stim_seq2.set_delta_time(duration_show_items);
+stim_seq2.set_duration(duration_show_items);
+stim_prompt.set_time(0);
+trial_seq.set_duration(duration_show_items*2+duration_show_trial_start_screen);
+
+stim_feedback.set_time(duration_show_selected);
+stim_feedback.set_duration(duration_show_feedback);
+
+
+

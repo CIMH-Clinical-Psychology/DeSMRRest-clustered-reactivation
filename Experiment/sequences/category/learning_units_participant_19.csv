@@ -1,0 +1,16 @@
+item1,item2,choice1,choice2,choice3,correct_choice (1-3)
+H,I,J,B,E,1;A,B,F,C,I,2;G,H,B,C,I,3;B,C,I,F,D,3;E,F,H,C,G,3;J,A,B,C,F,1;I,J,G,D,A,3;F,G,I,H,D,2;C,D,G,E,I,2;D,E,I,F,J,2
+H,I,J,B,D,1;D,E,A,F,I,2;F,G,A,C,H,3;G,H,I,J,C,1;C,D,I,F,E,3;B,C,G,D,J,2;A,B,C,I,F,1;I,J,F,B,A,3;J,A,E,B,H,2;E,F,J,G,C,2
+A,B,F,G,C,3;G,H,I,A,C,1;C,D,E,G,J,1;I,J,G,A,B,2;D,E,H,F,A,2;F,G,I,B,H,3;H,I,E,J,C,2;E,F,H,B,G,3;B,C,D,H,F,1;J,A,D,B,H,2
+H,I,A,J,F,2;B,C,G,H,D,3;A,B,C,D,G,1;F,G,H,I,B,1;D,E,J,I,F,3;J,A,F,B,D,2;G,H,J,C,I,3;E,F,G,H,A,1;I,J,A,G,B,1;C,D,G,J,E,3
+C,D,A,F,E,3;H,I,J,C,E,1;J,A,G,E,B,3;G,H,I,J,C,1;B,C,D,G,H,1;A,B,H,C,E,2;D,E,A,F,H,2;E,F,I,G,B,2;F,G,I,B,H,3;I,J,E,C,A,3
+C,D,A,E,F,2;J,A,B,H,D,1;G,H,A,E,I,3;D,E,H,B,F,3;I,J,G,A,D,2;H,I,J,C,E,1;F,G,C,H,A,2;A,B,E,I,C,3;B,C,E,D,J,2;E,F,B,G,H,2
+G,H,A,C,I,3;I,J,A,D,G,1;E,F,C,G,H,2;H,I,E,B,J,3;F,G,I,H,D,2;D,E,F,A,G,1;A,B,G,C,D,2;B,C,F,D,H,2;C,D,E,J,F,1;J,A,G,D,B,3
+G,H,A,I,D,2;E,F,I,B,G,3;F,G,H,D,I,1;J,A,F,E,B,3;A,B,C,D,G,1;I,J,A,F,B,1;H,I,F,J,A,2;D,E,I,F,B,2;C,D,G,E,I,2;B,C,F,I,D,3
+E,F,G,B,J,1;J,A,C,B,F,2;D,E,J,G,F,3;C,D,E,H,I,1;H,I,J,B,F,1;F,G,C,H,J,2;G,H,A,C,I,3;A,B,H,F,C,3;B,C,I,D,F,2;I,J,A,G,C,1
+E,F,G,B,J,1;D,E,G,J,F,3;G,H,D,I,J,2;F,G,A,H,C,2;J,A,B,H,D,1;A,B,F,I,C,3;I,J,A,G,D,1;H,I,F,B,J,3;C,D,A,E,F,2;B,C,D,I,F,1
+F,G,B,J,H,3;J,A,C,B,H,2;E,F,I,C,G,3;A,B,I,C,F,2;H,I,A,F,J,3;I,J,A,B,G,1;B,C,E,D,I,2;D,E,J,F,H,2;G,H,I,J,E,1;C,D,F,E,A,2
+E,F,G,A,H,1;I,J,F,D,A,3;B,C,F,I,D,3;A,B,G,C,D,2;F,G,C,I,H,3;C,D,E,G,A,1;H,I,E,J,C,2;G,H,I,E,J,1;D,E,F,G,A,1;J,A,G,B,E,2
+J,A,D,B,F,2;G,H,I,E,A,1;C,D,F,J,E,3;D,E,F,B,H,1;A,B,I,C,E,2;B,C,D,G,I,1;F,G,B,J,H,3;E,F,G,A,J,1;H,I,A,D,J,3;I,J,A,E,C,1
+E,F,I,C,G,3;D,E,F,J,H,1;J,A,F,C,B,3;A,B,E,C,I,2;F,G,B,I,H,3;G,H,D,I,J,2;H,I,J,B,E,1;B,C,D,E,I,1;I,J,E,A,D,2;C,D,A,E,F,2
+I,J,A,C,F,1;H,I,J,B,D,1;C,D,G,J,E,3;J,A,C,B,F,2;F,G,C,H,I,2;E,F,A,G,I,2;A,B,G,E,C,3;G,H,I,C,A,1;D,E,H,A,F,3;B,C,F,H,D,3

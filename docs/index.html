@@ -24,7 +24,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-  <title>Academic Project Page</title>
+  <title>Paper: Challenges in Replay Detection by TDLM in Post-Encoding Resting State</title>
   <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
   rel="stylesheet">
@@ -52,21 +52,25 @@
       <div class="container is-max-desktop">
         <div class="columns is-centered">
           <div class="column has-text-centered">
-            <h1 class="title is-1 publication-title">Challenges in Replay Detection by TDLM in Post-Encoding Resting State</h1>
+            <h1 class="title is-1 publication-title">Experiment Visualization for "Challenges in Replay Detection by TDLM in Post-Encoding Resting State"</h1>
             <div class="is-size-5 publication-authors">
               <!-- Paper authors -->
               <span class="author-block">
                 <a href="https://skjerns.de" target="_blank">Simon Kern</a><sup>*</sup>,</span>
+				<a href="https://juli-nagel.de" target="_blank">Juliane Nagel</a>,</span>
+				<a href="https://lennartwittkuhn.com" target="_blank">Lennart Wittkuhn</a>,</span>
+				<a href="https://gaislab.info" target="_blank">Steffen Gais</a>,</span>
+				<a href="https://scholar.google.co.uk/citations?user=RP8YtJgAAAAJ&hl=en" target="_blank">Raymond J Dolan</a>,</span>
+				<a href="https://scholar.google.de/citations?user=na6A-zkAAAAJ&hl=en" target="_blank">Gordon B Feld</a>,</span>
                 <span class="author-block">
-                  <a href="SECOND AUTHOR PERSONAL LINK" target="_blank">tba</a><sup>*</sup>,</span>
-                  <span class="author-block">
-                    <a href="https://scholar.google.de/citations?user=na6A-zkAAAAJ" target="_blank">Gordon Feld</a>
-                  </span>
+
                   </div>
 
                   <div class="is-size-5 publication-authors">
-                    <span class="author-block">Central Institute of Mental Health<br>...tba</span>
-                    <span class="eql-cntrb"><small><br><sup>*</sup>Indicates Equal Contribution</small></span>
+                    <span class="author-block">Central Institute of Mental Health<br></span>,
+                    <span class="author-block">University of Hamburg<br></span>,
+                    <span class="author-block">University of Tübingen<br></span>,
+                    <span class="author-block">UCL<br></span>
                   </div>
 
                   <div class="column has-text-centered">
@@ -81,17 +85,6 @@
                         <span>Paper</span>
                       </a>
                     </span>
-
-                    <!-- Supplementary PDF link -->
-                    <span class="link-block">
-                      <a href="static/pdfs/supplementary_material.pdf" target="_blank"
-                      class="external-link button is-normal is-rounded is-dark">
-                      <span class="icon">
-                        <i class="fas fa-file-pdf"></i>
-                      </span>
-                      <span>Supplementary</span>
-                    </a>
-                  </span>
 
                   <!-- Github link -->
                   <span class="link-block">
@@ -132,8 +125,7 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-WORK IN PROGRESS - this page will be updated soon. If you read this text after 27th of June, please let me know at simon.kern@zi-mannheim.de
-		  
+
 We investigated, using temporally delayed linear modelling (TDLM) and magnetoencephalography (MEG), whether items associated with an underlying graph structure are replayed during a post-learning resting state. In these same data, we have previously provided evidence for replay during on-line (non-rest) memory retrieval. Despite successful decoding of brain activity during a localizer task, and contrary to predictions, we did not detect evidence for replay during a post-learning resting state. To better understand this, we performed a hybrid simulation analysis in which we inserted synthetic replay events into a control resting state recorded prior to the actual experiment. This simulation revealed that replay detection using our current pipeline requires extremely high replay densities to reach significance (>1 replay sequence per second, with “replay” defined as a sequence of reactivations within a certain time lag). Furthermore, when scaling the number of replay events with a behavioural measure we were unable to experimentally induce a strong correlation between sequenceness and this measure. We infer that even if replay was present at plausible rates in our resting state dataset we would lack statistical power to detect it with TDLM. We discuss ways for optimizing the analysis approach and how to find boundary conditions under which TDLM can be expected to detect replay successfully. We conclude that solving these methodological constraints is likely to be crucial to optimise measuring replay non-invasively using MEG in humans.
 			</p>
         </div>
@@ -143,96 +135,149 @@ We investigated, using temporally delayed linear modelling (TDLM) and magnetoenc
 </section>
 <!-- End paper abstract -->
 
+<!--  -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Experiment overview</h2>
+        <div class="content has-text-justified">
+		        <img src="./images/overview.png"/>
 
-<!-- Image carousel -->
-<section class="hero is-small">
-  <div class="hero-body">
-    <div class="container">
-      <div id="results-carousel" class="carousel results-carousel">
-       <div class="item">
-        <!-- Your image here -->
-        <img src="static/images/carousel1.jpg" alt="MY ALT TEXT"/>
-        <h2 class="subtitle has-text-centered">
-          First image description.
-        </h2>
-      </div>
-      <div class="item">
-        <!-- Your image here -->
-        <img src="static/images/carousel2.jpg" alt="MY ALT TEXT"/>
-        <h2 class="subtitle has-text-centered">
-          Second image description.
-        </h2>
-      </div>
-      <div class="item">
-        <!-- Your image here -->
-        <img src="static/images/carousel3.jpg" alt="MY ALT TEXT"/>
-        <h2 class="subtitle has-text-centered">
-         Third image description.
-       </h2>
-     </div>
-     <div class="item">
-      <!-- Your image here -->
-      <img src="static/images/carousel4.jpg" alt="MY ALT TEXT"/>
-      <h2 class="subtitle has-text-centered">
-        Fourth image description.
-      </h2>
-    </div>
-  </div>
-</div>
-</div>
-</section>
-<!-- End image carousel -->
-
-
-
-
-<!-- Youtube video -->
-<section class="hero is-small is-light">
-  <div class="hero-body">
-    <div class="container">
-      <!-- Paper video. -->
-      <h2 class="title is-3">Video Presentation</h2>
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-four-fifths">
-          
-          <div class="publication-video">
-            <!-- Youtube embed code here -->
-            <iframe src="https://www.youtube.com/embed/JkaxUblCGz0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-          </div>
+          <p>
+		  All parts of the experiment were run in an MEG while recording. The general structure of the experiment was:
+			</p>
+			<ol>
+			  <li>Control Resting State (8 minutes eyes closed)</li>
+			  <li>Localizer (10 images in 500 trials)</li>
+			  <li>Learning Block (2-6 blocks of 12 trials)</li>
+			  <li>Resting State (8 minutes eyes closed)</li>
+			  <li>Retrieval (1 block of 12 trials)</li>
+			</ol>
         </div>
       </div>
     </div>
   </div>
 </section>
-<!-- End youtube video -->
+<!-- -->
 
+<!-- RESTING STATE -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">1. Control Resting State</h2>
+        <div class="content has-text-justified">
+          <p>
+		  An 8-minute resting state was measured, participants instructed to close their eyes and to not think of anything in particular. Data of this session was later used for basis of the hybrid simulation.
+	</p>
+        <img src="./images/restingstate.gif"/>
 
-
-<!-- Paper poster -->
-<section class="hero is-small is-light">
-  <div class="hero-body">
-    <div class="container">
-      <h2 class="title">Poster</h2>
-
-      <iframe  src="static/pdfs/sample.pdf" width="100%" height="550">
-          </iframe>
-        
+        </div>
       </div>
     </div>
-  </section>
-<!--End paper poster -->
-
-
-<!--BibTex citation -->
-  <section class="section" id="BibTeX">
-    <div class="container is-max-desktop content">
-      <h2 class="title">BibTeX</h2>
-      <pre><code>BibTex Code Here</code></pre>
-    </div>
+  </div>
 </section>
-<!--End BibTex citation -->
+<!-- -->
+
+<!-- LOCALIZER -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">2. Localizer</h2>
+        <div class="content has-text-justified">
+          <p>
+10 images, diverse in color&shape were presented to participants. 
+First the word belonging to the image was presented auditorily, then either a matching or non-matching image was shown.
+participants were instructed to press a button in case of mismatch (attention check). This data was later used to train a classifier on these images.
+	</p>
+    <p>In total, 500 such trials were recorded, with 60 trials being mismatches</p>
+
+	        <img src="./images/stimuli.png" alt="all 10 stimuli visualized"/>
+<p>Video of screen during localizer (click to play, with audio)</p>
+<div is-centered >
+          <video poster="" id="video3" autoplay controls loop height="100%">\
+            <!-- Your video file here -->
+            <source src="./images/presentation_localizer.mp4"
+            type="video/mp4">
+          </video>
+		  </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- -->
+
+<!-- LEARNING -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">3. Learning</h2>
+        <div class="content has-text-justified">
+          <p>
+The ten images were embedded into a graph structure. 
+The graph had duplicates such that participants could not rely on simple pair-wise 
+learning but needed to learn triplets/surrounding. Participants never 
+	</p>
+	<p>Participants performed blocks until they reached 80% correct trials. 
+	Regardless, they performed a minimum of 2 and a maximum of 6 blocks.</p>
+	<p>Here's a top-down view of the sequence (participants were never told about this hidden structure)</p>
 
 
+	        <img src="./images/sequence.png" alt="all 10 stimuli visualized"/>
+<p>GIF of screen during learning block</p>
+	        <img src="./images/learning.gif" alt="sequence learning"/>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- -->
+
+<!-- RESTING STATE -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">4. Post-Learning Resting State</h2>
+        <div class="content has-text-justified">
+          <p>
+		  Another 8-minute resting state was measured, in which we expected consolidation of the learned material.
+	</p>
+        <img src="./images/restingstate.gif"/>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- -->
+
+
+<!-- RETRIEVAl -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">5. Retrieval</h2>
+        <div class="content has-text-justified">
+	<p>One block of 12 trials (each sequence position once) was shown to test retrieval performance after resting state. No feedback was provided during this block.</p>
+
+<p>GIF of screen during retrieval block</p>
+	        <img src="./images/retrieval.gif" alt="sequence learning"/>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- -->
+
+<!-- -->
   <footer class="footer">
   <div class="container">
     <div class="columns is-centered">
